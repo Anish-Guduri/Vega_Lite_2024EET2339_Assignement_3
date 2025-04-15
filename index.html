@@ -275,44 +275,115 @@ const donutChartSpec =
 
   };
 
+  // const histogramSpec = {
+  //         "width": 300,
+  //         "height": 300,
+  //         "title": {"text": "Histogram of Units with Mean", "anchor": "start", "fontSize": 18},
+  //         "layer": [
+  //           {
+  //             "data": {
+  //               "url": "https://raw.githubusercontent.com/Anish-Guduri/Vega_Lite_2024EET2339_Assignement_3/refs/heads/main/HW_III_CSV.csv",
+  //               "format": {"type": "csv"}
+  //             },
+  //             "mark": "bar",
+  //             "encoding": {
+  //               "x": {"field": "Units", "bin": true, "type": "quantitative"},
+  //               "y": {"aggregate": "count", "type": "quantitative"}
+  //             }
+  //           },
+  //           {
+  //             "data": {
+  //               "url": "https://raw.githubusercontent.com/Anish-Guduri/Vega_Lite_2024EET2339_Assignement_3/refs/heads/main/HW_III_CSV.csv",
+  //               "format": {"type": "csv"}
+  //             },
+  //             "transform": [
+  //               {
+  //                 "aggregate": [{"op": "mean", "field": "Units", "as": "mean_units"}]
+  //               }
+  //             ],
+  //             "mark": {
+  //               "type": "rule",
+  //               "color": "red",
+  //               "strokeDash": [4, 4],
+  //               "size": 2
+  //             },
+  //             "encoding": {
+  //               "x": {"field": "mean_units", "type": "quantitative"}
+  //             }
+  //           }
+  //         ]
+  //   };
   const histogramSpec = {
-          "width": 300,
-          "height": 300,
-          "title": {"text": "Histogram of Units with Mean", "anchor": "start", "fontSize": 18},
-          "layer": [
-            {
-              "data": {
-                "url": "https://raw.githubusercontent.com/Anish-Guduri/Vega_Lite_2024EET2339_Assignement_3/refs/heads/main/HW_III_CSV.csv",
-                "format": {"type": "csv"}
-              },
-              "mark": "bar",
-              "encoding": {
-                "x": {"field": "Units", "bin": true, "type": "quantitative"},
-                "y": {"aggregate": "count", "type": "quantitative"}
-              }
-            },
-            {
-              "data": {
-                "url": "https://raw.githubusercontent.com/Anish-Guduri/Vega_Lite_2024EET2339_Assignement_3/refs/heads/main/HW_III_CSV.csv",
-                "format": {"type": "csv"}
-              },
-              "transform": [
-                {
-                  "aggregate": [{"op": "mean", "field": "Units", "as": "mean_units"}]
-                }
-              ],
-              "mark": {
-                "type": "rule",
-                "color": "red",
-                "strokeDash": [4, 4],
-                "size": 2
-              },
-              "encoding": {
-                "x": {"field": "mean_units", "type": "quantitative"}
-              }
-            }
-          ]
-    };
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 300,
+  "height": 300,
+  "title": {
+    "text": "Histogram of Units with Mean",
+    "anchor": "start",
+    "fontSize": 18
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/Anish-Guduri/Vega_Lite_2024EET2339_Assignement_3/refs/heads/main/HW_III_CSV.csv",
+        "format": {"type": "csv"}
+      },
+      "mark": "bar",
+      "encoding": {
+        "x": {"field": "Units", "bin": true, "type": "quantitative"},
+        "y": {"aggregate": "count", "type": "quantitative"}
+      }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/Anish-Guduri/Vega_Lite_2024EET2339_Assignement_3/refs/heads/main/HW_III_CSV.csv",
+        "format": {"type": "csv"}
+      },
+      "transform": [
+        {
+          "aggregate": [{"op": "mean", "field": "Units", "as": "mean_units"}]
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "color": "red",
+        "strokeDash": [4, 4],
+        "size": 2
+      },
+      "encoding": {
+        "x": {"field": "mean_units", "type": "quantitative"}
+      }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/Anish-Guduri/Vega_Lite_2024EET2339_Assignement_3/refs/heads/main/HW_III_CSV.csv",
+        "format": {"type": "csv"}
+      },
+      "transform": [
+        {
+          "aggregate": [{"op": "mean", "field": "Units", "as": "mean_units"}]
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dy": -5,
+        "dx": 5,
+        "color": "red",
+        "fontSize": 12
+      },
+      "encoding": {
+        "x": {"field": "mean_units", "type": "quantitative"},
+        "y": {"value": 0},
+        "text": {
+          "field": "mean_units",
+          "type": "quantitative",
+          "format": ".2f"
+        }
+      }
+    }
+  ]
+};
 
   const barChartSpec = {
     "width": 300,
@@ -326,13 +397,16 @@ const donutChartSpec =
             "x": {
               "field": "Item",
               "type": "nominal",
-              "axis": {"title": "Item", "labelAngle": 0}
+              "axis": {"title": "Item", "labelAngle": 0},
+              "sort": "-y"
             },
             "y": {
               "aggregate": "sum",
               "field": "Total",
               "type": "quantitative",
               "axis": {"title": "Total Sales ($)"}
+              
+
             },
             "color": {
               "field": "Item",
@@ -343,54 +417,54 @@ const donutChartSpec =
           "title": {"text": "Total Sales by Item", "anchor": "start", "fontSize": 18}
   };
 
-//   const lineChartSpec ={
-//   "width": 300,
-//   "height": 300,
-//   "data": {
-//     "url": "https://raw.githubusercontent.com/Anish-Guduri/Vega_Lite_2024EET2339_Assignement_3/refs/heads/main/HW_III_CSV.csv",
-//     "format": {"type": "csv"}
-//   },
-//   "transform": [
-//     {"calculate": "toDate(datum.OrderDate)", "as": "ParsedDate"},
-//     {"timeUnit": "yearmonth", "field": "ParsedDate", "as": "YearMonth"},
-//     {
-//       "impute": "Total",
-//       "groupby": ["Region"],
-//       "key": "YearMonth",
-//       "value": 0
-//     }
-//   ],
-//   "mark": {"type": "line", "point": true},
-//   "encoding": {
-//     "x": {
-//       "field": "YearMonth",
-//       "type": "temporal",
-//       "title": "Order Month",
-//       "axis": {"format": "%b %Y", "labelAngle": -40}
-//     },
-//     "y": {
-//       "aggregate": "sum",
-//       "field": "Total",
-//       "type": "quantitative",
-//       "title": "Total Sales ($)"
-//     },
-//     "color": {
-//       "field": "Region",
-//       "type": "nominal",
-//       "title": "Region"
-//     },
-//     "tooltip": [
-//       {"field": "Region", "type": "nominal", "title": "Region"},
-//       {"field": "YearMonth", "type": "temporal", "title": "Month"},
-//       {"field": "Total", "aggregate": "sum", "type": "quantitative", "title": "Total Sales ($)"}
-//     ]
-//   },
-//   "title": {
-//     "text": "Monthly Sales Trend by Region",
-//     "anchor": "start",
-//     "fontSize": 18
-//   }
-// };
+  const lineChartSpec ={
+  "width": 300,
+  "height": 300,
+  "data": {
+    "url": "https://raw.githubusercontent.com/Anish-Guduri/Vega_Lite_2024EET2339_Assignement_3/refs/heads/main/HW_III_CSV.csv",
+    "format": {"type": "csv"}
+  },
+  "transform": [
+    {"calculate": "toDate(datum.OrderDate)", "as": "ParsedDate"},
+    {"timeUnit": "yearmonth", "field": "ParsedDate", "as": "YearMonth"},
+    {
+      "impute": "Total",
+      "groupby": ["Region"],
+      "key": "YearMonth",
+      "value": 0
+    }
+  ],
+  "mark": {"type": "line", "point": true},
+  "encoding": {
+    "x": {
+      "field": "YearMonth",
+      "type": "temporal",
+      "title": "Order Month",
+      "axis": {"format": "%b %Y", "labelAngle": -40}
+    },
+    "y": {
+      "aggregate": "sum",
+      "field": "Total",
+      "type": "quantitative",
+      "title": "Total Sales ($)"
+    },
+    "color": {
+      "field": "Region",
+      "type": "nominal",
+      "title": "Region"
+    },
+    "tooltip": [
+      {"field": "Region", "type": "nominal", "title": "Region"},
+      {"field": "YearMonth", "type": "temporal", "title": "Month"},
+      {"field": "Total", "aggregate": "sum", "type": "quantitative", "title": "Total Sales ($)"}
+    ]
+  },
+  "title": {
+    "text": "Monthly Sales Trend by Region",
+    "anchor": "start",
+    "fontSize": 18
+  }
+};
 
 const violinPlotSpec = {
   "width":400,
@@ -413,13 +487,14 @@ const violinPlotSpec = {
 };
 const treemapSpec = {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
-  "width": 400,
+  "width": 300,
   "height": 300,
-  "padding": 5,
+  "padding": 2,
   "data": [
     {
       "name": "raw",
-      "url": csvUrl,
+            "url": "https://raw.githubusercontent.com/Anish-Guduri/Vega_Lite_2024EET2339_Assignement_3/refs/heads/main/HW_III_CSV.csv",
+      // "url": "",
       "format": { "type": "csv" }
     },
     {
@@ -456,6 +531,15 @@ const treemapSpec = {
       "range": {"scheme": "category10"}
     }
   ],
+  "legends": [
+    {
+      "fill": "colorScale",
+      "title": "Region",
+      "orient": "right",
+      "labelFontSize": 12,
+      "titleFontSize": 14
+    }
+  ],
   "marks": [
     {
       "type": "rect",
@@ -481,11 +565,13 @@ const treemapSpec = {
         "enter": {
           "x": {"signal": "(datum.x0 + datum.x1)/2"},
           "y": {"signal": "(datum.y0 + datum.y1)/2"},
-          "text": {"field": "Rep"},
+          "text": {
+            "signal": "datum.Rep + ' ($' + format(datum.TotalSales, ',') + ')'"
+          },
           "align": {"value": "center"},
           "baseline": {"value": "middle"},
           "fill": {"value": "white"},
-          "fontSize": {"value": 12},
+          "fontSize": {"value": 11},
           "limit": {"signal": "datum.x1 - datum.x0 - 4"}
         }
       }
