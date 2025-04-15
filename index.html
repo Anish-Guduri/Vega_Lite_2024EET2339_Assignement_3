@@ -62,7 +62,7 @@
         <button class="btn btn-light" onclick="showSingle('vis3')">Streamgraph</button>
         <button class="btn btn-light" onclick="showSingle('vis4')">Histogram</button>
         <button class="btn btn-light" onclick="showSingle('vis5')">Bar Chart</button>
-        <button class="btn btn-light" onclick="showSingle('vis6')">Line Chart</button>
+        <button class="btn btn-light" onclick="showSingle('vis6')">Treemap</button>
         <button class="btn btn-light" onclick="backToMulti()">Multi-view</button>
       </div>
     </div>
@@ -80,8 +80,13 @@
   </div>
   <div class="row">
     <div class="col-md-4" id="vis4"></div>
-    <div class="col-md-4" id="vis5"></div>
     <div class="col-md-4" id="vis6"></div>
+    <div class="col-md-4" id="vis5"></div>
+  </div>
+  <div class="row">
+    <div class="col-md-4" id="vis4"></div>
+    <div class="col-md-4" id="vis6"></div>
+    <div class="col-md-4" id="vis5"></div>
   </div>
 </div>
 
@@ -197,6 +202,12 @@ const donutChartSpec =
             "filled": true,
             "size": 100
           },
+          "signals": [
+    {
+      "name": "brush_x",
+      "update": "[100, 200]"
+    }
+  ],
           "encoding": {
             "x": {
               "field": "Units",
@@ -260,7 +271,7 @@ const donutChartSpec =
               {"field": "Total", "type": "quantitative", "title": "Total ($)"}
             ]
           },
-          "title": {"text": "Streamgraph: Sales Over Time by Item", "anchor": "start", "fontSize": 18}
+          "title": {"text": "Streamgraph: Total Sales Over Time by Item", "anchor": "start", "fontSize": 18}
 
   };
 
@@ -332,54 +343,161 @@ const donutChartSpec =
           "title": {"text": "Total Sales by Item", "anchor": "start", "fontSize": 18}
   };
 
-  const lineChartSpec ={
-  "width": 300,
+//   const lineChartSpec ={
+//   "width": 300,
+//   "height": 300,
+//   "data": {
+//     "url": "https://raw.githubusercontent.com/Anish-Guduri/Vega_Lite_2024EET2339_Assignement_3/refs/heads/main/HW_III_CSV.csv",
+//     "format": {"type": "csv"}
+//   },
+//   "transform": [
+//     {"calculate": "toDate(datum.OrderDate)", "as": "ParsedDate"},
+//     {"timeUnit": "yearmonth", "field": "ParsedDate", "as": "YearMonth"},
+//     {
+//       "impute": "Total",
+//       "groupby": ["Region"],
+//       "key": "YearMonth",
+//       "value": 0
+//     }
+//   ],
+//   "mark": {"type": "line", "point": true},
+//   "encoding": {
+//     "x": {
+//       "field": "YearMonth",
+//       "type": "temporal",
+//       "title": "Order Month",
+//       "axis": {"format": "%b %Y", "labelAngle": -40}
+//     },
+//     "y": {
+//       "aggregate": "sum",
+//       "field": "Total",
+//       "type": "quantitative",
+//       "title": "Total Sales ($)"
+//     },
+//     "color": {
+//       "field": "Region",
+//       "type": "nominal",
+//       "title": "Region"
+//     },
+//     "tooltip": [
+//       {"field": "Region", "type": "nominal", "title": "Region"},
+//       {"field": "YearMonth", "type": "temporal", "title": "Month"},
+//       {"field": "Total", "aggregate": "sum", "type": "quantitative", "title": "Total Sales ($)"}
+//     ]
+//   },
+//   "title": {
+//     "text": "Monthly Sales Trend by Region",
+//     "anchor": "start",
+//     "fontSize": 18
+//   }
+// };
+
+const violinPlotSpec = {
+  "width":400,
   "height": 300,
-  "data": {
-    "url": "https://raw.githubusercontent.com/Anish-Guduri/Vega_Lite_2024EET2339_Assignement_3/refs/heads/main/HW_III_CSV.csv",
-    "format": {"type": "csv"}
+  "data": {"url": csvUrl, "format": {"type": "csv"}},
+  "transform": [{"density": "Units", "groupby": ["Region"]}],
+  "mark": "area",
+  "encoding": {
+    "x": {"field": "value", "type": "quantitative", "title": "Units"},
+    "y": {
+      "field": "density",
+      "type": "quantitative",
+      "stack": "center",
+      "title": "Density"
+    },
+    "color": {"field": "Region", "type": "nominal"},
+    "opacity": {"value": 0.6}
   },
-  "transform": [
-    {"calculate": "toDate(datum.OrderDate)", "as": "ParsedDate"},
-    {"timeUnit": "yearmonth", "field": "ParsedDate", "as": "YearMonth"},
+  "title": {"text": "Violin Plot: Units Distribution by Region", "fontSize": 18, "anchor": "start"}
+};
+const treemapSpec = {
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 400,
+  "height": 300,
+  "padding": 5,
+  "data": [
     {
-      "impute": "Total",
-      "groupby": ["Region"],
-      "key": "YearMonth",
-      "value": 0
+      "name": "raw",
+      "url": csvUrl,
+      "format": { "type": "csv" }
+    },
+    {
+      "name": "treeData",
+      "source": "raw",
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": ["Region", "Rep"],
+          "fields": ["Total"],
+          "ops": ["sum"],
+          "as": ["TotalSales"]
+        },
+        {
+          "type": "nest",
+          "keys": ["Region", "Rep"]
+        },
+        {
+          "type": "treemap",
+          "field": "TotalSales",
+          "sort": {"field": "value", "order": "descending"},
+          "round": true,
+          "size": [{"signal": "width"}, {"signal": "height"}],
+          "as": ["x0", "y0", "x1", "y1"]
+        }
+      ]
     }
   ],
-  "mark": {"type": "line", "point": true},
-  "encoding": {
-    "x": {
-      "field": "YearMonth",
-      "type": "temporal",
-      "title": "Order Month",
-      "axis": {"format": "%b %Y", "labelAngle": -40}
+  "scales": [
+    {
+      "name": "colorScale",
+      "type": "ordinal",
+      "domain": {"data": "treeData", "field": "Region"},
+      "range": {"scheme": "category10"}
+    }
+  ],
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "treeData"},
+      "encode": {
+        "enter": {
+          "x": {"field": "x0"},
+          "y": {"field": "y0"},
+          "x2": {"field": "x1"},
+          "y2": {"field": "y1"},
+          "fill": {"scale": "colorScale", "field": "Region"},
+          "stroke": {"value": "#fff"},
+          "tooltip": {
+            "signal": "{'Region': datum.Region, 'Representative': datum.Rep, 'Total Sales': datum.TotalSales}"
+          }
+        }
+      }
     },
-    "y": {
-      "aggregate": "sum",
-      "field": "Total",
-      "type": "quantitative",
-      "title": "Total Sales ($)"
-    },
-    "color": {
-      "field": "Region",
-      "type": "nominal",
-      "title": "Region"
-    },
-    "tooltip": [
-      {"field": "Region", "type": "nominal", "title": "Region"},
-      {"field": "YearMonth", "type": "temporal", "title": "Month"},
-      {"field": "Total", "aggregate": "sum", "type": "quantitative", "title": "Total Sales ($)"}
-    ]
-  },
+    {
+      "type": "text",
+      "from": {"data": "treeData"},
+      "encode": {
+        "enter": {
+          "x": {"signal": "(datum.x0 + datum.x1)/2"},
+          "y": {"signal": "(datum.y0 + datum.y1)/2"},
+          "text": {"field": "Rep"},
+          "align": {"value": "center"},
+          "baseline": {"value": "middle"},
+          "fill": {"value": "white"},
+          "fontSize": {"value": 12},
+          "limit": {"signal": "datum.x1 - datum.x0 - 4"}
+        }
+      }
+    }
+  ],
   "title": {
-    "text": "Monthly Sales Trend by Region",
+    "text": "Treemap: Total Sales by Region and Representative",
     "anchor": "start",
-    "fontSize": 18
+    "fontSize": 16
   }
 };
+
 
 // Your existing donutChartSpec, scatterPlotSpec, streamgraphSpec, histogramSpec are assumed to be defined here.
 
@@ -389,7 +507,8 @@ const charts = {
   vis3: {spec: streamgraphSpec, title: "Streamgraph"},
   vis4: {spec: histogramSpec, title: "Histogram"},
   vis5: {spec: barChartSpec, title: "Bar Chart"},
-  vis6: {spec: lineChartSpec, title: "Line Chart"}
+  // vis6: {spec: lineChartSpec, title: "Line Chart"}
+  vis6: {spec: treemapSpec, title: "Treemap"},
 };
 
 function renderCharts() {
